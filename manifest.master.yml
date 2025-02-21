@@ -1,0 +1,99 @@
+plugin:
+  name: custom-data-type-wikidata
+  version: 1
+  url: https://github.com/programmfabrik/fylr-custom-data-type-wikidata
+  displayname:
+    de-DE: Wikidata-Verknüpfung
+    en-US: Wikidata-Referencing
+  info:
+    de-DE: Stellt Verknüpfungen mit dem Normdatendienst Wikidata her.
+    en-US: Use for references to entities of Wikidata-AuthorityFile.
+  server:
+    api-version:
+      require: 1
+  l10n: l10n/customDataTypeWikidata.csv
+  webfrontend:
+    url: customDataTypeWikidata.js
+    css: customDataTypeWikidata.css
+
+    
+base_url_prefix: "webfrontend"
+    
+custom_types:
+  wikidata:
+    mapping:
+      conceptName:
+        type: text
+      conceptURI:
+        type: text
+      facetTerm:
+        type: text_l10n
+    config:
+      schema:
+        - name: institution
+          parameters:
+            value:
+              type: bool
+        - name: person
+          parameters:
+            value:
+              type: bool
+        - name: place
+          parameters:
+            value:
+              type: bool
+        - name: custom
+          parameters:
+            value:
+              type: text
+      mask:
+        - name: editor_display
+          parameters:
+            value:
+              type: select
+              options: ["default", "condensed"]
+    update:
+      plugin_user:
+        reference: system:root
+      exec:
+        service: "node"
+        commands:
+          - prog: "node"
+            stdin:
+              type: body
+            stdout:
+              type: body
+            args:
+              - type: "value"
+                value: "%_exec.pluginDir%/updater/wikidataUpdater.js"
+              - type: "value"
+                value: "%info.json%"
+      timeout: 120
+      batch_size: 10
+      expires_days: 1              
+              
+base_config:
+  - name: update_wikidata
+    group: update_custom_data_type
+    parameters:
+      restrict_time:
+        type: bool
+        default: false
+        position: 0
+      from_time:
+        type: int
+        default: 19
+        min: 0
+        max: 24
+        position: 1
+      to_time:
+        type: int
+        default: 4
+        min: 0
+        max: 24
+        position: 2
+      default_language:
+        type: text
+        default: 'de'
+        position: 3
+
