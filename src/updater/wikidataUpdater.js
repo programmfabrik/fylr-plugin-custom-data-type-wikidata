@@ -148,13 +148,10 @@ main = (payload) => {
                             // save frontend language (same as given or default)
                             newCdata.frontendLanguage = originalCdata.frontendLanguage;
 
-                            let uiLang = originalCdata.frontendLanguage;
-                            let tempCdata = WikidataUtil.getAdditionalTextFromObject(data, uiLang, databaseLanguages)
+                            let tempCdata = WikidataUtil.getAdditionalTextFromObject(data, newCdata.frontendLanguage, databaseLanguages)
                             newCdata._fulltext = tempCdata._fulltext;
                             newCdata._standard = tempCdata._standard;
                             newCdata.facetTerm = tempCdata.facetTerm;
-                            // save old conceptName and old conceptUri nad old uiLang
-                            newCdata.frontendLanguage = uiLang;
                             newCdata.conceptName = originalCdata.conceptName;
                             newCdata.conceptURI = originalURI;
 
@@ -250,6 +247,15 @@ outputErr = (err2) => {
             });
 
             frontendLanguages = config.system.config.languages.frontend;
+
+            const testDefaultLanguageConfig = config.plugin['custom-data-type-wikidata'].config.update_wikidata.default_language;
+            if (testDefaultLanguageConfig) {
+                if (testDefaultLanguageConfig.length == 2) {
+                    defaultLanguage = testDefaultLanguageConfig;
+                    console.error("HIER!!!");
+                    console.error(defaultLanguage);
+                }
+            }
 
             ////////////////////////////////////////////////////////////////////////////
             // availabilityCheck for wikidata-api
