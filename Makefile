@@ -2,8 +2,7 @@ ZIP_NAME ?= "customDataTypeWikidata.zip"
 PLUGIN_NAME = "custom-data-type-wikidata"
 
 # coffescript-files to compile
-COFFEE_FILES = commons.coffee \
-	CustomDataTypeWikidata.coffee \
+COFFEE_FILES = CustomDataTypeWikidata.coffee \
 	CustomDataTypeWikidataFacet.coffee \
 	wikidataUtilities.coffee
 
@@ -25,13 +24,9 @@ build: clean buildinfojson ## clean, compile, copy files to build folder
 				cp build-info.json build/$(PLUGIN_NAME)/build-info.json # build-info
 
 				mkdir -p src/tmp # build code from coffee
-				cp easydb-library/src/commons.coffee src/tmp
 
 				cp src/webfrontend/*.coffee src/tmp
 				cd src/tmp && coffee -b --compile ${COFFEE_FILES} # bare-parameter is obligatory!
-
-				# first: commons! Important
-				cat src/tmp/commons.js > build/$(PLUGIN_NAME)/webfrontend/customDataTypeWikidata.js
 
 				cat src/tmp/CustomDataTypeWikidata.js >> build/$(PLUGIN_NAME)/webfrontend/customDataTypeWikidata.js
 				cat src/tmp/CustomDataTypeWikidataFacet.js >> build/$(PLUGIN_NAME)/webfrontend/customDataTypeWikidata.js
@@ -44,7 +39,6 @@ build: clean buildinfojson ## clean, compile, copy files to build folder
 				rm -rf src/tmp # clean tmp
 
 				cp l10n/customDataTypeWikidata.csv build/$(PLUGIN_NAME)/l10n/customDataTypeWikidata.csv # copy l10n
-				tail -n+2 easydb-library/src/commons.l10n.csv >> build/$(PLUGIN_NAME)/l10n/customDataTypeWikidata.csv # copy commons
 
 				cp src/webfrontend/css/main.css build/$(PLUGIN_NAME)/webfrontend/customDataTypeWikidata.css # copy css
 				cp manifest.master.yml build/$(PLUGIN_NAME)/manifest.yml # copy manifest

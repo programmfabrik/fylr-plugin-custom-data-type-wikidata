@@ -1,4 +1,4 @@
-class CustomDataTypeWikidata extends CustomDataTypeWithCommons
+class CustomDataTypeWikidata extends CustomDataTypeWithCommonsAsPlugin
 
   #######################################################################
   # return name of plugin
