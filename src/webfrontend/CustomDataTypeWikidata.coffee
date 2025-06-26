@@ -80,6 +80,9 @@ class CustomDataTypeWikidata extends CustomDataTypeWithCommonsAsPlugin
       filter._unset_filter = true
       return filter
 
+    else if data[key+":has_value"]
+      return @getHasValueFilter(data, key)
+
     # find all records which have the uri as conceptURI
     filter = null
     if data[@name()]?.conceptURI
@@ -96,17 +99,6 @@ class CustomDataTypeWikidata extends CustomDataTypeWithCommonsAsPlugin
 
     filter
 
-
-  #######################################################################
-  # make tag for expert-search
-  getQueryFieldBadge: (data) ->
-    if !data[@name()] || !data[@name()]?.conceptURI
-      value = $$("field.search.badge.without")
-    else
-      value = data[@name()].conceptName
-
-    name: @nameLocalized()
-    value: value
 
   #######################################################################
   # handle suggestions-menu
