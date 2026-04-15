@@ -89,8 +89,15 @@ main = (payload) => {
             let requests = [];
 
             URIList.forEach((uri) => {
-                let dataRequestUrl = 'https://jsontojsonp.gbv.de/?url=' + encodeURIComponent(uri)
-                let dataRequest = fetch(dataRequestUrl);
+                const dataRequestUrl = uri
+                const options = {
+                    headers: {
+                        Accept: 'application/json',
+                        'User-Agent': 'Node'
+                    },
+                    redirect: 'follow'
+                }
+                let dataRequest = fetch(dataRequestUrl, options);
                 requests.push({
                     url: dataRequestUrl,
                     uri: uri,
@@ -272,41 +279,47 @@ outputErr = (err2) => {
             ////////////////////////////////////////////////////////////////////////////
             // availabilityCheck for wikidata-api
             ////////////////////////////////////////////////////////////////////////////
-            let testURL = 'https://jsontojsonp.gbv.de/?url=http%3A%2F%2Fwww.wikidata.org%2Fentity%2FQ15303972';
-            https.get(testURL, res => {
-                let testData = [];
-                res.on('data', chunk => {
-                    testData.push(chunk);
-                });
-                res.on('end', () => {
-                    const testVocab = JSON.parse(Buffer.concat(testData).toString());
-                    if (testVocab.entities.Q15303972) {
-                        ////////////////////////////////////////////////////////////////////////////
-                        // test successful --> continue with custom-data-type-update
-                        ////////////////////////////////////////////////////////////////////////////
-                        process.stdin.on('readable', () => {
-                            let chunk;
-                            while ((chunk = process.stdin.read()) !== null) {
-                                data = data + chunk
-                            }
-                        });
-                        process.stdin.on('end', () => {
-                            ///////////////////////////////////////
-                            // continue with update-routine
-                            ///////////////////////////////////////
-                            try {
-                                let payload = JSON.parse(data)
-                                main(payload)
-                            } catch (error) {
-                                console.error("caught error", error)
-                                outputErr(error)
-                            }
-                        });
-                    } else {
-                        console.error('Error while interpreting data from wikidata-API.');
-                    }
-                });
-            }).on('error', err => {
+            const testURL = 'https://www.wikidata.org/entity/Q15303972';
+            const options = {
+                headers: {
+                    Accept: 'application/json',
+                    'User-Agent': 'Node'
+                },
+                redirect: 'follow'
+            }
+
+            fetch(testURL, options).then(async res => {
+                if (!res.ok) {
+                    console.error('Error fetching test data from wikidata-API: ', res.status, res.statusText);
+                }
+                const testVocab = await res.json();
+                if (testVocab.entities.Q15303972) {
+                    ////////////////////////////////////////////////////////////////////////////
+                    // test successful --> continue with custom-data-type-update
+                    ////////////////////////////////////////////////////////////////////////////
+                    process.stdin.on('readable', () => {
+                        let chunk;
+                        while ((chunk = process.stdin.read()) !== null) {
+                            data = data + chunk
+                        }
+                    });
+                    process.stdin.on('end', () => {
+                        ///////////////////////////////////////
+                        // continue with update-routine
+                        ///////////////////////////////////////
+                        try {
+                            let payload = JSON.parse(data)
+                            main(payload)
+                        } catch (error) {
+                            console.error("caught error", error)
+                            outputErr(error)
+                        }
+                    });
+                } else {
+                    console.error('Error while interpreting data from wikidata-API.');
+                }
+
+            }).catch(err => {
                 console.error('Error while receiving data from wikidata-API: ', err.message);
             });
         }).catch(error => {
