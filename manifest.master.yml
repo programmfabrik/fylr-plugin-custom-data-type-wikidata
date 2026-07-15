@@ -6,8 +6,26 @@ plugin:
     de-DE: Wikidata-Verknüpfung
     en-US: Wikidata-Referencing
   info:
-    de-DE: Stellt Verknüpfungen mit dem Normdatendienst Wikidata her.
-    en-US: Use for references to entities of Wikidata-AuthorityFile.
+    de-DE: |
+      Ergänzt einen benutzerdefinierten Datentyp, mit dem sich fylr-Datensätze mit Einträgen aus Wikidata, der freien Wissensdatenbank, verknüpfen lassen. Bei der Eingabe schlägt das Feld passende Wikidata-Einträge vor und speichert Bezeichnung und URI als verlässliche Normdatenreferenz.
+
+      - Vorschlagssuche über Wikidata-Einträge
+      - Suche wahlweise auf Institutionen, Personen, Orte oder eine eigene Klasse eingrenzen
+      - Speichert bevorzugte Bezeichnung, Concept-URI und einen Volltext aus Labels und Notationen
+      - Mehrsprachige Facettenbegriffe für die facettierte Suche
+      - Standard- oder kompakte einzeilige Editordarstellung
+
+      Bindet [Wikidata](https://www.wikidata.org) an.
+    en-US: |
+      Adds a custom data type for linking fylr records to entities in Wikidata, the free collaborative knowledge base. As you type, the field suggests matching Wikidata records and stores their label and URI, giving you reliable authority references.
+
+      - Type-ahead search over Wikidata records
+      - Scope the search to institutions, persons, places or a custom class
+      - Stores preferred label, concept URI and a fulltext string of labels and notations
+      - Multilingual facet terms for faceted search
+      - Default or condensed single-line editor display
+
+      Integrates with [Wikidata](https://www.wikidata.org).
   server:
     api-version:
       require: 1
@@ -18,9 +36,8 @@ plugin:
     dependencies:
       - commons-library
 
-    
+
 base_url_prefix: "webfrontend"
-    
 custom_types:
   wikidata:
     mapping:
@@ -74,8 +91,8 @@ custom_types:
                 value: "%info.json%"
       timeout: 120
       batch_size: 10
-      expires_days: 1              
-              
+      expires_days: 1
+
 base_config:
   - name: update_wikidata
     group: update_custom_data_type
