@@ -14,7 +14,7 @@ Note: For technical reasons, the API requests run via a proxy at the central off
 
 ## installation
 
-The latest version of this plugin can be found [here](https://github.com/programmfabrik/fylr-plugin-custom-data-type-wikidata/releases/latest/download/customDataTypeWikidata.zip).
+The latest version of this plugin can be found [here](https://github.com/programmfabrik/fylr-plugin-custom-data-type-wikidata/releases/latest/download/fylr-plugin-custom-data-type-wikidata.zip).
 
 The ZIP can be downloaded and installed using the plugin manager, or used directly (recommended).
 
