@@ -11,18 +11,23 @@
 server:
   install:
   - l10n/customDataTypeWikidata.csv
+  # assembled server-side files, sources in the order written
+  bundles:
+    - out: updater/wikidataUpdater.js
+      sources:
+      - src/updater/wikidataUpdater.js
+      - webfrontend/wikidataUtilities.coffee
 webfrontend:
-  coffee1:
-  - webfrontend/CustomDataTypeWikidata.coffee
-  - webfrontend/CustomDataTypeWikidataFacet.coffee
-  - webfrontend/wikidataUtilities.coffee
+  # assembled into plugin.webfrontend.url, in this order:
+  # .coffee is compiled (CoffeeScript 1.x), .scss compiled,
+  # anything else taken verbatim
+  bundles:
+    - sources:
+        - webfrontend/CustomDataTypeWikidata.coffee
+        - webfrontend/CustomDataTypeWikidataFacet.coffee
+        - webfrontend/wikidataUtilities.coffee
   install:
   - webfrontend/customDataTypeWikidata.css
-build:
-  bundles:
-  - out: updater/wikidataUpdater.js
-    sources:
-    - src/updater/wikidataUpdater.js
-    - webfrontend/wikidataUtilities.coffee
-  zip_aliases:
-  - customDataTypeWikidata.zip
+
+zip_aliases:
+- customDataTypeWikidata.zip
